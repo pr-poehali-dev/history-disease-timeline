@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Icon from "@/components/ui/icon";
+import { QRCodeSVG } from "qrcode.react";
 
 interface Disease {
   id: string;
@@ -143,6 +145,7 @@ const diseases: Disease[] = [
 const Index = () => {
   const [selectedDisease, setSelectedDisease] = useState<Disease | null>(null);
   const [filterCentury, setFilterCentury] = useState<string>("all");
+  const currentUrl = window.location.href;
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -190,9 +193,39 @@ const Index = () => {
               История Эпидемий
             </h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-['Roboto']">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-['Roboto'] mb-6">
             Хроника самых разрушительных болезней в истории человечества — от древних времён до наших дней
           </p>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all font-['Roboto'] font-medium">
+                <Icon name="QrCode" size={20} />
+                Показать QR-код
+              </button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="font-['Montserrat'] text-2xl">QR-код сайта</DialogTitle>
+                <DialogDescription className="font-['Roboto']">
+                  Отсканируйте этот код для быстрого доступа с мобильного устройства
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col items-center gap-4 py-4">
+                <div className="bg-white p-6 rounded-lg">
+                  <QRCodeSVG
+                    value={currentUrl}
+                    size={256}
+                    level="H"
+                    includeMargin={true}
+                    fgColor="#1A1F2C"
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground font-['Roboto'] text-center max-w-xs">
+                  {currentUrl}
+                </p>
+              </div>
+            </DialogContent>
+          </Dialog>
         </header>
 
         <div className="mb-8 flex flex-wrap gap-2 justify-center">
